@@ -63,10 +63,23 @@ class Settings(BaseSettings):
     HTTP_CLIENT_MAX_CONNECTIONS: int = Field(
         default=100, description="HTTP客户端最大连接数"
     )
-
+    # 邮件服务配置
+    USER_STORE_ENCRYPTION_KEY: str = Field(..., description="Fernet 加密密钥，用于加密用户邮箱配置")
+    USER_STORE_PATH: str = Field(default="data/users.enc", description="加密用户配置文件路径")
+    IMAP_TIMEOUT: int = Field(default=30, description="IMAP 操作超时秒数")
+    SMTP_TIMEOUT: int = Field(default=30, description="SMTP 操作超时秒数")
     # 服务器配置
     HOST: str = Field(default="0.0.0.0", description="服务器监听地址")
     PORT: int = Field(default=8000, description="服务器监听端口")
+
+    # 用户存储配置
+    USER_STORE_ENCRYPTION_KEY: str = Field(
+        ..., description="用户数据加密密钥（Fernet对称密钥，32字节url-safe base64编码）"
+    )
+    USER_STORE_PATH: str = Field(
+        default="data/user_store.json.enc",
+        description="用户数据存储文件路径（加密）",
+    )
 
     model_config = SettingsConfigDict(
         env_file=".env",

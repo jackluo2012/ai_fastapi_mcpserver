@@ -5,7 +5,7 @@
 import secrets
 from typing import Optional
 
-from fastapi import Header, HTTPException, Request, status
+from fastapi import Depends, Header, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from app.core.config import get_settings
@@ -22,7 +22,7 @@ security = HTTPBearer(auto_error=False)
 async def verify_api_key(
     request: Request,
     x_api_key: Optional[str] = Header(None, alias="X-API-Key"),
-    authorization: Optional[HTTPAuthorizationCredentials] = security,
+    authorization: Optional[HTTPAuthorizationCredentials] = Depends(security),
 ) -> str:
     """
     验证API Key（FastAPI 依赖注入版本）

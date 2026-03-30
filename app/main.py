@@ -24,6 +24,8 @@ from app.core.logging import configure_logging, get_logger
 from app.core.security import verify_origin
 from app.mcp_server.app import mcp
 from app.mcp_server.transport import create_protected_mcp_app
+from app.routers import registration
+from app.services.user_store import user_store
 from app.utils.http_client import http_client
 
 # 配置日志系统
@@ -43,6 +45,7 @@ async def lifespan(app: FastAPI):
     """
     logger.info("application_starting")
     async with mcp.session_manager.run():
+        await user_store.initialize()
         await http_client.start()
         logger.info("application_started")
         yield
@@ -79,6 +82,9 @@ app.add_middleware(
 app.add_exception_handler(MCPException, mcp_exception_handler)
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(Exception, general_exception_handler)
+
+# 注册路由
+app.include_router(registration.router)
 
 
 @app.middleware("http")
