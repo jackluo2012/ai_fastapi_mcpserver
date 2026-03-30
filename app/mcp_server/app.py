@@ -23,7 +23,7 @@ mcp_tool = create_mcp_tool_decorator(mcp)
 
 # 导入工具模块以触发装饰器注册
 # 注意：必须在mcp实例创建后导入，这样装饰器才能正确注册工具
-from app.tools import demo, system, resources, prompts  # noqa: E402
+from app.tools import demo, system, resources, prompts,weather  # noqa: E402
 
 logger.info("mcp_server_initialized", server_name="Enterprise-Demo-MCP")
 
